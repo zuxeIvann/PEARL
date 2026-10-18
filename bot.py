@@ -275,8 +275,11 @@ async def restore_command(interaction: discord.Interaction, confirm: bool = Fals
 async def on_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
     if not interaction.response.is_done():
         await interaction.response.send_message(f"Lỗi hoặc không đủ quyền: {error}", ephemeral=True)
-
 if not TOKEN:
-    raise RuntimeError("Thiếu DISCORD_TOKEN trong .env")
-    bot.tree.add_command(group)
+    raise RuntimeError("Thiếu DISCORD_TOKEN")
+
+bot.tree.add_command(group)
+
+print("Lenh global:", [cmd.name for cmd in bot.tree.get_commands()])
+
 bot.run(TOKEN)
