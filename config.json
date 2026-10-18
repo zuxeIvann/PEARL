@@ -1,0 +1,32 @@
+{
+  "enabled": true,
+  "log_channel_id": 0,
+  "alert_channel_id": 0,
+  "trusted_user_ids": [],
+  "punishment": "strip_roles",
+  "window_seconds": 15,
+  "thresholds": {
+    "channel_delete": 3,
+    "channel_create": 8,
+    "channel_update": 8,
+    "role_delete": 3,
+    "role_create": 8,
+    "role_update": 8,
+    "ban": 4,
+    "kick": 4,
+    "webhook_create": 3,
+    "bot_add": 2
+  },
+  "anti_raid": {
+    "enabled": true,
+    "window_seconds": 15,
+    "joins": 8,
+    "timeout_minutes": 10
+  },
+  "anti_spam": {
+    "enabled": true,
+    "window_seconds": 8,
+    "messages": 7,
+    "timeout_minutes": 10
+  }
+}
