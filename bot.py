@@ -101,28 +101,35 @@ async def audit_check(guild, action, key, target_id=None):
         await report(guild, f"⚠️ Không đọc được audit log: {exc}")
 
 
+
 @bot.event
 async def on_ready():
-    if not getattr(bot, "_synced", False):
+    if getattr(bot, "_synced", False):
+        return
+
+    print("Bat dau dong bo lenh...", flush=True)
+
+    try:
         if GUILD_ID:
             guild = discord.Object(id=GUILD_ID)
             bot.tree.copy_global_to(guild=guild)
             synced = await bot.tree.sync(guild=guild)
-            print(f"Da dong bo {len(synced)} lenh cho server {GUILD_ID}")
         else:
             synced = await bot.tree.sync()
-            print(f"Da dong bo {len(synced)} lenh global")
 
-        print("Danh sach lenh:", [cmd.name for cmd in synced])
+        print("Dong bo thanh cong:",
+              [cmd.name for cmd in synced], flush=True)
         bot._synced = True
 
+    except Exception as e:
+        print(f"Loi dong bo: {type(e).__name__}: {e}", flush=True)
 
     if not getattr(bot, "_dashboard_started", False):
         await start_dashboard(bot, cfg, save)
         bot._dashboard_started = True
 
-    print(f"Aegis Guard online: {bot.user}")
-@bot.event
+    print(f"Aegis Guard online: {bot.user}", flush=True)
+
 async def on_guild_channel_delete(channel):
     await audit_check(channel.guild, discord.AuditLogAction.channel_delete, "channel_delete", channel.id)
 
