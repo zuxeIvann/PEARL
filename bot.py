@@ -106,16 +106,20 @@ async def on_ready():
         if GUILD_ID:
             guild = discord.Object(id=GUILD_ID)
             bot.tree.add_command(group, guild=guild)
-            await bot.tree.sync(guild=guild)
+            synced = await bot.tree.sync(guild=guild)
+            print(f"Da dong bo {len(synced)} lenh cho server {GUILD_ID}")
+            print("Danh sach lenh:", [cmd.name for cmd in synced])
         else:
             bot.tree.add_command(group)
-            await bot.tree.sync()
+            synced = await bot.tree.sync()
+            print("Danh sach lenh global:", [cmd.name for cmd in synced])
         bot._synced = True
+
     if not getattr(bot, "_dashboard_started", False):
         await start_dashboard(bot, cfg, save)
         bot._dashboard_started = True
-    print(f"Aegis Guard online: {bot.user}")
 
+    print(f"Aegis Guard online: {bot.user}")
 @bot.event
 async def on_guild_channel_delete(channel):
     await audit_check(channel.guild, discord.AuditLogAction.channel_delete, "channel_delete", channel.id)
