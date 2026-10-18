@@ -278,4 +278,5 @@ async def on_error(interaction: discord.Interaction, error: app_commands.AppComm
 
 if not TOKEN:
     raise RuntimeError("Thiếu DISCORD_TOKEN trong .env")
+    bot.tree.add_command(group)
 bot.run(TOKEN)
