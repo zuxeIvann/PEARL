@@ -100,20 +100,22 @@ async def audit_check(guild, action, key, target_id=None):
     except (discord.Forbidden, discord.HTTPException) as exc:
         await report(guild, f"⚠️ Không đọc được audit log: {exc}")
 
+
 @bot.event
 async def on_ready():
     if not getattr(bot, "_synced", False):
         if GUILD_ID:
             guild = discord.Object(id=GUILD_ID)
-            bot.tree.add_command(group, guild=guild)
+            bot.tree.copy_global_to(guild=guild)
             synced = await bot.tree.sync(guild=guild)
             print(f"Da dong bo {len(synced)} lenh cho server {GUILD_ID}")
-            print("Danh sach lenh:", [cmd.name for cmd in synced])
         else:
-            bot.tree.add_command(group)
             synced = await bot.tree.sync()
-            print("Danh sach lenh global:", [cmd.name for cmd in synced])
+            print(f"Da dong bo {len(synced)} lenh global")
+
+        print("Danh sach lenh:", [cmd.name for cmd in synced])
         bot._synced = True
+
 
     if not getattr(bot, "_dashboard_started", False):
         await start_dashboard(bot, cfg, save)
